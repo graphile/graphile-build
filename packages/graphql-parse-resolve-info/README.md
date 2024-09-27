@@ -372,6 +372,26 @@ single-level object containing only the fields compatible with
            ...as before...
 ```
 
+### `isResolveTree(value)`
+
+Determines whether the argument is a value of type `ResolveTree`. This is useful only to TypeScript users. It allows to differentiate between `ResolveTree` and `FieldsByTypeName` objects to pass to `simplifyParsedResolveInfoFragmentWithType `.
+
+Example:
+
+```ts
+import { isResolveTree } from "graphql-parse-resolve-info";
+
+const { parsedResolveInfoFragment, simplifiedFragment } = await graphql(
+  Schema,
+  query
+);
+
+isResolveTree(parsedResolveInfoFragment); // returns true
+isResolveTree(simplifiedFragment); // returns true
+isResolveTree(parsedResolveInfoFragment.fieldsByTypeName); // returns false
+isResolveTree(simplifiedFragment.fieldsByTypeName); // returns false
+```
+
 ## Thanks
 
 This project was originally based on https://github.com/tjmehta/graphql-parse-fields, but has evolved a lot since then.

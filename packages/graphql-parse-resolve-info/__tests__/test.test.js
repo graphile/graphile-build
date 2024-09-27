@@ -1,6 +1,7 @@
 const {
   parseResolveInfo,
   simplifyParsedResolveInfoFragmentWithType,
+  isResolveTree,
 } = require("../src");
 const {
   graphql,
@@ -275,4 +276,42 @@ test("directives", async () => {
   );
   expect(parsedResolveInfoFragment).toMatchSnapshot();
   expect(simplifiedFragment).toMatchSnapshot();
+});
+
+test("isResolveTree", async () => {
+  const variables = {
+    include: true,
+    exclude: false,
+  };
+  const { parsedResolveInfoFragment, simplifiedFragment } = await new Promise(
+    (resolve, reject) => {
+      let o;
+      graphql(
+        Schema,
+        query,
+        null,
+        {
+          test: _o => (o = _o),
+        },
+        variables
+      ).then(d => {
+        try {
+          const { errors } = d;
+          expect(errors).toBeFalsy();
+        } catch (e) {
+          return reject(e);
+        }
+        if (o) {
+          resolve(o);
+        } else {
+          reject(new Error("test not called?"));
+        }
+      }, reject);
+    }
+  );
+
+  expect(isResolveTree(parsedResolveInfoFragment)).toBe(true);
+  expect(isResolveTree(simplifiedFragment)).toBe(true);
+  expect(isResolveTree(parsedResolveInfoFragment.fieldsByTypeName)).toBe(false);
+  expect(isResolveTree(simplifiedFragment.fieldsByTypeName)).toBe(false);
 });

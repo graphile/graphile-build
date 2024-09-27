@@ -37,6 +37,12 @@ export interface ResolveTree {
   fieldsByTypeName: FieldsByTypeName;
 }
 
+export function isResolveTree(
+  value: ResolveTree | FieldsByTypeName | null | undefined
+): value is ResolveTree {
+  return typeof value?.name === "string" && Boolean(value.fieldsByTypeName);
+}
+
 const debug = debugFactory("graphql-parse-resolve-info");
 
 const DEBUG_ENABLED = debug.enabled;
