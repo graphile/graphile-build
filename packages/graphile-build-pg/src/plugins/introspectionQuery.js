@@ -417,7 +417,6 @@ with
     where
       idx.indislive is not false and
       idx.indisexclusion is not true and -- exclusion index
-      idx.indcheckxmin is not true and -- always valid?
       idx.indpred is null -- no partial index predicate
     order by
       idx.indrelid, idx.indexrelid
